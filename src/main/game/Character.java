@@ -26,14 +26,10 @@ public class Character implements Movable, Drawable{
     protected boolean back;
     protected int elevation;
     private boolean isJumping;
-    // private boolean isMoving;
     private double yVel = 0;
-    // private double xVel = 0;
     private static final double GRAVITY = 0.98;
     private double startY = 0;
     private double startX = 0;
-    //private int xMovement = 0;
-    //private int yMovement = 0;
     
     protected int facing;
     protected Player following;
@@ -47,7 +43,7 @@ public class Character implements Movable, Drawable{
         this.width = width;
         this.xOffset = xoff;
         this.yOffset = yoff;
-        this.spriteSheet = spriteSheet; //Utils.loadSpriteSheet(spritefile, 32, 32, 2.0, offset);
+        this.spriteSheet = spriteSheet;
         this.sprite = spriteSheet.getDefault();
         this.animationCycle = ANIMATION_FRAMES/3;
         this.back = true;
@@ -56,15 +52,31 @@ public class Character implements Movable, Drawable{
         this.trailIndex = 0;
         this.elevation = 0;
         this.isJumping = false;
-        // this.isMoving = false;
     }
 
-    public double getX(){return this.x;}
-    public double getY(){return this.y;}
-    public void setX(double x){this.x = x;}
-    public void setY(double y){this.y = y;}
-    public int getWidth(){return this.width;}
-    public int getHeight(){return this.height;}
+    public double getX(){
+        return this.x;
+        }
+
+    public double getY(){
+        return this.y;
+        }
+
+    public void setX(double x){
+        this.x = x;
+        }
+
+    public void setY(double y){
+        this.y = y;
+        }
+
+    public int getWidth(){
+        return this.width;
+        }
+
+    public int getHeight(){
+        return this.height;
+        }
 
     public void draw(Graphics2D g, double xoffset, double yoffset) {
         g.drawImage(sprite, (int)(x-xoffset-xOffset), (int)(y-yoffset-yOffset), null);
@@ -86,39 +98,28 @@ public class Character implements Movable, Drawable{
         this.startY = y;
         this.yVel = -10;
     }
-    //was going to be used for cutscenes, but after scrapping a major portion of the game, it was no longer necessary
-    //public void xMove(int xMovement) {
-    //    this.isMoving = true;
-    //    this.startX = x;
-    //    this.xMovement = xMovement;
-    //    if (xMovement>0) {
-    //        this.xVel = 5;
-    //    } else {
-    //        this.xVel = -5;
-    //    }
-    //}
-    //public void yMove(int yMovement) {
-    //    this.isMoving = true;
-    //    this.startY = y;
-    //    this.yMovement = yMovement;
-    //    if (yMovement>0) {
-    //        this.yVel = 5;
-    //    } else {
-    //        this.yVel = -5;
-    //    }
-//
-//
-    //}
 
     protected double collisionTime(Drawable object, boolean xAxis, double speed, boolean plusminus){
-        double axisMinThis = xAxis ? this.x : this.y;
-        double axisMaxThis = xAxis ? this.x + this.width : this.y + this.height;
-        double axisMinOther = xAxis ? object.getX() : object.getY();
-        double axisMaxOther = xAxis ? object.getX() + object.getWidth() : object.getY() + object.getHeight();
-        double orthoMinThis = xAxis ? this.y : this.x;
-        double orthoMaxThis = xAxis ? this.y + this.height : this.x + this.width;
-        double orthoMinOther = xAxis ? object.getY() : object.getX();
-        double orthoMaxOther = xAxis ? object.getY() + object.getHeight() : object.getX() + object.getWidth();
+        if (xAxis) {
+            double axisMinThis = this.x;
+            double axisMaxThis = this.x + this.width;
+            double axisMinOther = object.getX();
+            double axisMaxOther = object.getX() + object.getWidth();
+            double orthoMinThis = this.y;
+            double orthoMaxThis = this.y + this.height;
+            double orthoMinOther = object.getY();
+            double orthoMaxOther = object.getY() + object.getHeight();
+        } else {
+            double axisMinThis = this.y;
+            double axisMaxThis = this.y + this.height;
+            double axisMinOther = object.getY();
+            double axisMaxOther = object.getY() + object.getHeight();
+            double orthoMinThis = this.x;
+            double orthoMaxThis = this.x + this.width;
+            double orthoMinOther = object.getX();
+            double orthoMaxOther = object.getX() + object.getWidth();
+
+        }
         if ((orthoMinOther < orthoMinThis && orthoMinThis < orthoMaxOther) || 
             (orthoMinOther < orthoMaxThis && orthoMaxThis < orthoMaxOther) || 
             (orthoMinThis <= orthoMinOther && orthoMinOther < orthoMaxThis)) {
@@ -132,22 +133,6 @@ public class Character implements Movable, Drawable{
     }
 
     public void update(ArrayList<Drawable> objects){
-        //if (this.isMoving) {
-        //    if (this.xVel>0) {
-        //        x += xVel;
-        //        if (x >= startX+xMovement) {
-        //            this.isMoving = false;
-        //            xVel = 0;
-        //        }
-        //    }
-        //    if (this.yVel>0) {
-        //        y += yVel;
-        //        if (y >= startY+yMovement) {
-        //            this.isMoving = false;
-        //            yVel = 0;
-        //        }
-        //    }
-        //}
         if(this.isJumping){
             y += yVel;
             yVel += GRAVITY;

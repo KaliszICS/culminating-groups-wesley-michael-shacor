@@ -112,8 +112,6 @@ public class Screen extends Frame implements KeyListener {
     }
 
     public void update(Graphics g) {
-        //Rectangle d = this.getBounds();
-        //System.out.println(d.width + " " + d.height);
         paint(g);
     }
 }

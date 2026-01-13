@@ -6,7 +6,6 @@ game/Character.java
 game/Screen.java
 game/Utils.java
 game/World.java
-game/Tile.java
 game/menu/Menu.java
 game/menu/MainMenu.java
 game/menu/LoadSaveMenu.java

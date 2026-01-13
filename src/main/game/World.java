@@ -42,6 +42,8 @@ public class World {
     Random rand = new Random();
     private BufferedImage map = Utils.loadImage("maps/hometowndraft.png");
     private GameState state = GameState.GAME;
+    private int spawnBound = 10;
+    private int spawnDelay = 120;
     
     public World() {
         player = new Player(4);
@@ -53,17 +55,6 @@ public class World {
         this.juliette = Character.JULIE;
         this.colin = Character.COLIN;
         this.deni = Character.DENI;
-        //int[] startingPosition = ((LoadSaveMenu)(Main.menu)).getLoadPosition();
-        //int startX = startingPosition[0];
-        //int startY = startingPosition[1];
-        //this.player.setX(startX);
-        //this.player.setY(startY);
-        //this.juliette.setX(startX);
-        //this.juliette.setY(startY);
-        //this.colin.setX(startX);
-        //this.colin.setY(startY);
-        //this.deni.setX(startX);
-        //this.deni.setY(startY);
         this.juliette.followPlayer(player, 1);
         this.colin.followPlayer(player, 2);
         this.deni.followPlayer(player, 3);
@@ -147,13 +138,6 @@ public class World {
         this.state = state;
     }
 
-
-    public void createNPC(String filename, int placementX, int placementY, double scale) {
-        Image NPC = Utils.loadImage(filename, placementX, placementY, 1);
-        Block b = new Block(Block.Type.RECTANGLE, placementX, placementY, 32, 32);
-
-    }
-
     public void setCutscene(Cutscene cutscene) {
         this.cutscene = cutscene;
     }
@@ -177,16 +161,18 @@ public class World {
     }
 
     public void release(char keyChar) {
-        if(keyChar == 'w' || keyChar == 'a' || keyChar == 's' || keyChar == 'd') player.stopPlayer(keyChar);
+        if(keyChar == 'w' || keyChar == 'a' || keyChar == 's' || keyChar == 'd') {
+            player.stopPlayer(keyChar);
+        }
     }
     
     public void update() {
         ticks += 1;
-        if (ticks % 120 == 0) {
+        if (ticks % spawnDelay == 0) {
             while (true) {
-                int enemyX = rand.nextInt(MAP_WIDTH-100)+90;
-                int enemyY = rand.nextInt(MAP_HEIGHT-100)+90;
-                if (Math.abs(enemyY - player.getY())+Math.abs(enemyX-player.getX()) < SPAWN_DISTANCE) {
+                int enemyX = rand.nextInt(MAP_WIDTH-2*spawnBound)+spawnBound;
+                int enemyY = rand.nextInt(MAP_HEIGHT-2*spawnBound)+spawnBound;
+                if (Math.pow((Math.pow((enemyY - player.getY()),2)+Math.pow((enemyX-player.getX()),2)),0.5) < SPAWN_DISTANCE) {
                     continue;
                 }
                 Enemy checker = new Enemy(player);
