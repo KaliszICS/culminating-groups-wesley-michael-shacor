@@ -13,6 +13,14 @@ import java.io.IOException;
 import java.awt.Image;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
+
+/**
+ * Defines a World class that controls the game world
+ * @author Wesley Cheung
+ * @author Michael Chen
+ * @author Shacor Vernon
+ * @version 1.0.0
+ */
 public class World {
     public enum GameState {
         GAME,

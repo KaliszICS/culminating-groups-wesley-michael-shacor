@@ -1,6 +1,14 @@
 package game;
 import java.awt.image.BufferedImage;
 
+/**
+ * Defines a sheet of sprites
+ * @author Wesley Cheung
+ * @author Michael Chen
+ * @author Shacor Vernon
+ * @version 1.0.0
+ */
+
 public class SpriteSheet {
     private BufferedImage[][] sprites;
     /**

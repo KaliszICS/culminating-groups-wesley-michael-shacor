@@ -17,6 +17,13 @@ import java.awt.Color;
 import java.awt.geom.Rectangle2D;
 import java.io.FileWriter;
 
+/**
+ * Defines a Utility class that is final
+ * @author Wesley Cheung
+ * @author Michael Chen
+ * @author Shacor Vernon
+ * @version 1.0.0
+ */
 public final class Utils{
     private static final int BOX_THICKNESS = 2;
     private static final int TEXT_PADDING_X = 10;

@@ -15,6 +15,7 @@ import java.io.File;
  * @author Wesley Cheung
  * @author Michael Chen
  * @author Shacor Vernon
+ * @version 1.0.0
  */
 
 public class Screen extends Frame implements KeyListener {
