@@ -43,15 +43,15 @@ public class World {
     private ArrayList<Enemy> enemies;
     private Cutscene cutscene;
     private int ticks = 0;
-    private final int SPAWN_DISTANCE = 400;
+    private final int SPAWN_DISTANCE = 200;
     private final int MAP_WIDTH = 3200;
     private final int MAP_HEIGHT = 3200;
     private boolean spawnable = false;
     private Random rand = new Random();
     private BufferedImage map = Utils.loadImage("maps/hometowndraft.png");
     private GameState state = GameState.GAME;
-    private int spawnBound = 10;
-    private int spawnDelay = 120;
+    private int spawnBound = 40;
+    private final int spawnDelay = 120;
     
     /**
      * Constructs a World object

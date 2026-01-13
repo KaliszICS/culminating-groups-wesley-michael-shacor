@@ -95,7 +95,7 @@ public class Player extends Character{
         return this.percentHP;
     }
 
-    public void update(/*  Tile[][] map, */ArrayList<Drawable> objects){
+    public void update(ArrayList<Drawable> objects){
         double minX = 1;
         double minY = 1;
         boolean Xcollision = false;

@@ -46,7 +46,7 @@ public final class Utils{
      * @param scale Scale factor to multiply image size
      * @return the Image that has been loaded, null if an exception occurs
      */
-    public static Image loadImage(String filename, int x, int y, double scale){
+    public static Image loadImage(String filename, int x, int y, int scale){
         try {
             BufferedImage all = ImageIO.read(new File("./resources/" + filename));
             BufferedImage bimg = all.getSubimage(x*32, y*32, 32, 32);

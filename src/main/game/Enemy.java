@@ -16,8 +16,8 @@ public class Enemy extends Character{
     public Enemy(Player player) {
         super(new SpriteSheet("mc.png", 32, 32, 2.0, 0), 48, 58, 10, 6);
         this.player = player;
-        super.speed = 2;
-        super.diagSpeed = 2*Math.sqrt(speed);
+        super.speed = 1.5;
+        super.diagSpeed = 1.5*Math.sqrt(speed);
     }
 
     public void attackPlayer() {
