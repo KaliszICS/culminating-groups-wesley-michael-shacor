@@ -9,7 +9,7 @@ public class NPC implements Drawable {
     private Image image;
     
     public NPC(String filename, int x, int y, int width, int height) {
-        this.image = Utils.loadImage(filename, 0, 0, 1);
+        this.image = Utils.loadImage(filename, 0, 0, 2);
         this.x = x;
         this.y = y;
         this.width = width;

@@ -10,11 +10,23 @@ import java.awt.Insets;
 import javax.imageio.ImageIO;
 import java.io.File;
 
+/**
+ * Defines a screen (graphical interface) that the game is displayed upon
+ * @author Wesley Cheung
+ * @author Michael Chen
+ * @author Shacor Vernon
+ */
+
 public class Screen extends Frame implements KeyListener {
     private BufferedImage buffer;
     private int xoffset;
     private int yoffset;
     
+    /** 
+     * Constructs a Screen, of the size 640 x 480 pixels, which is not resizable
+     * Sets the screen icon to thosewhoseedark from the resource folder
+     * Sets the background of the screen, and adds a keyListener to it
+     */
     public Screen() {
         setSize(640, 480);
         pack();
@@ -42,6 +54,15 @@ public class Screen extends Frame implements KeyListener {
         setVisible(true);
     }
 
+    /**
+     * Paints buffered images on the screen
+     * Checks to see if buffer is invalid
+     * If buffer is invalid, creates a new buffer
+     * Creates buffer graphics from buffer, in size of screen
+     * Sets game font in 24px, sets color, and draws depending on Main.state
+     * Draws buffer
+     * @param g Graphics to be drawn upon
+     */
     public void paint(Graphics g){
         if (buffer == null || buffer.getWidth() != getSize().width || buffer.getHeight() != getSize().height) {
             buffer = new BufferedImage(getSize().width, getSize().height, BufferedImage.TYPE_INT_ARGB);
@@ -72,7 +93,15 @@ public class Screen extends Frame implements KeyListener {
         bufferG.dispose();
         g.drawImage(buffer, this.xoffset/2, this.yoffset, this);
     }
-
+    /**
+     * Executes actions when keys are pressed, depending on Main state
+     * If Main state is WORLD, world will receive the key
+     * If Main state is a menu, executes actions based on the key
+     * If key is arrow, runs move (arrow direction) in menu
+     * If key is z, runs menu.select()
+     * If key is x, runs menu.cancel()
+     * @param e KeyEvent that is created every time a key is pressed
+     */
     @Override
     public void keyPressed(KeyEvent e){
         char keyChar = e.getKeyChar();
@@ -92,7 +121,11 @@ public class Screen extends Frame implements KeyListener {
                 break;
         }
     }
-
+    /**
+     * Executes actions based on Main state
+     * If Main state is WORLD, world will receive that the key has been released
+     * @param e KeyEvent that is created every time a key is released
+     */
     @Override
     public void keyReleased(KeyEvent e){
         switch(Main.state){
@@ -102,15 +135,18 @@ public class Screen extends Frame implements KeyListener {
         }
     }
 
+    /**
+     * Inherited method that has no purpose
+     */
     @Override
     public void keyTyped(KeyEvent e){
 
     }
 
-    public void repaint(Graphics g) {
-        paint(g);
-    }
-
+    /**
+     * Updates screen
+     * @param g Graphics to be drawn upon
+     */
     public void update(Graphics g) {
         paint(g);
     }

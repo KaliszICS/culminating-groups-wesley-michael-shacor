@@ -92,8 +92,7 @@ public class Character implements Movable, Drawable{
         this.trailIndex = offset*TRAIL_SEPARATION;
     }
 
-    public void jump(){
-        System.out.println("DSFSD");
+    private void jump(){
         this.isJumping = true;
         this.startY = y;
         this.yVel = -10;

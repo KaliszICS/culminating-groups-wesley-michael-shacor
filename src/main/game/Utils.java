@@ -18,10 +18,9 @@ import java.awt.geom.Rectangle2D;
 import java.io.FileWriter;
 
 public final class Utils{
-    private static int BOX_THICKNESS = 2;
-    private static int TEXT_PADDING_X = 10;
-    private static int TEXT_PADDING_Y = 2;
-    // hit an alternate font in crazy ahh moments
+    private static final int BOX_THICKNESS = 2;
+    private static final int TEXT_PADDING_X = 10;
+    private static final int TEXT_PADDING_Y = 2;
     public static Font mainFont;
     public static BufferedImage loadImage(String filename){
         try {
@@ -32,12 +31,19 @@ public final class Utils{
             return null;
         }
     }
-
+    /**
+     * Loads and scales a 32x32 "tile" as an Image
+     * @param filename Name of the file in the resources folder
+     * @param x Tile number in the x axis, will be multiplied by 32 pixels
+     * @param y Tile number in the y axis, will be multiplied by 32 pixels
+     * @param scale Scale factor to multiply image size
+     * @return the Image that has been loaded, null if an exception occurs
+     */
     public static Image loadImage(String filename, int x, int y, double scale){
         try {
             BufferedImage all = ImageIO.read(new File("./resources/" + filename));
             BufferedImage bimg = all.getSubimage(x*32, y*32, 32, 32);
-            Image scaled = bimg.getScaledInstance(64, 64, Image.SCALE_SMOOTH);
+            Image scaled = bimg.getScaledInstance(32*scale, 32*scale, Image.SCALE_SMOOTH);
             return scaled;
         } catch (Exception e) {
             System.out.println("One (or more) resource files failed to load");
@@ -46,6 +52,15 @@ public final class Utils{
         }
     }
 
+    /**
+     * Loads a sprite sheet
+     * @param filename String that is the filename to be loaded
+     * @param width Integer denoting the width of each sprite
+     * @param height Integer denoting the height of each sprite
+     * @param scale Double denoting the scale factor of each sprite
+     * @param offset Integer denoting the x offset of the spritesheet
+     * @return the loaded spritesheet as a 2D BufferedImage array
+     */
     public static BufferedImage[][] loadSpriteSheet(String filename, int width, int height, double scale, int offset){
         try {
             BufferedImage all = ImageIO.read(new File("./resources/" + filename));
@@ -72,6 +87,9 @@ public final class Utils{
         }
     }
 
+    /**
+     * Loads the Gamefont, found in resources
+     */
     public static void loadFonts(){
         try {
             mainFont = Font.createFont(Font.TRUETYPE_FONT, new File("./resources/Gamefont-Regular.ttf"));
@@ -81,6 +99,17 @@ public final class Utils{
         }
     }
 
+    /**
+     * Draws a textbox
+     * @param g 2D Graphics layer to be drawn on
+     * @param text Text to be drawn
+     * @param x left-most x coordinates of the text box
+     * @param y top y coordinates of the text box
+     * @param width width of the text box
+     * @param height height of the text box
+     * @param location Location of text, 0 is top left, 1 is top center, 2 is top right
+     * @return the Rectangle2D objectthat has been 
+     */
     public static Rectangle2D drawTextBox(Graphics2D g, String text, int x, int y, int width, int height, int location){
         Stroke temp = g.getStroke();
         g.setStroke(new BasicStroke(BOX_THICKNESS));
@@ -93,15 +122,15 @@ public final class Utils{
         int textHeight = (int)rect.getHeight();
         g.setStroke(temp);
         switch(location){
-            case 0: // top-left
+            case 0: // top left
                 g.drawString(text, x+TEXT_PADDING_X, y+textHeight+TEXT_PADDING_Y);
                 rect.setRect(x+TEXT_PADDING_X, y+textHeight+TEXT_PADDING_Y, textWidth, textHeight);
                 break;
-            case 1: // top-center
+            case 1: // top center
                 g.drawString(text, x+(width-textWidth)/2, y+textHeight+TEXT_PADDING_Y);
                 rect.setRect(x+(width-textWidth)/2, y+textHeight+TEXT_PADDING_Y, textWidth, textHeight);
                 break;
-            case 2: // top-right
+            case 2: // top right
                 g.drawString(text, x+width-textWidth-TEXT_PADDING_X, y+textHeight+TEXT_PADDING_Y);
                 rect.setRect(x+width-textWidth-TEXT_PADDING_X, y+textHeight+TEXT_PADDING_Y, textWidth, textHeight);
                 break;
@@ -109,6 +138,12 @@ public final class Utils{
         return rect;
     }
 
+    /**
+     * Saves the player position, x and y to a text file
+     * @param playerX X value of the player
+     * @param playerY Y value of the player
+     * @param filename Filename to save to, will overwrite
+     */
     public static void savePlayerPosition(int playerX, int playerY, String filename) {
         FileWriter fw = null;
         try {
@@ -129,24 +164,24 @@ public final class Utils{
             }
         
     }
-
-    public static int[] loadPlayerPosition(String filename) {
-        int[] position = new int[2];
-        BufferedReader br = null;
-        try {
-            br = new BufferedReader(new FileReader(filename));
-            position[0] = Integer.parseInt(br.readLine());
-            position[1] = Integer.parseInt(br.readLine());
-            System.out.println("Game loaded!");
-        } catch (IOException | NumberFormatException e) {
-            System.out.println("Save failed to load");
-        } finally {
-            try {
-                if (br != null) br.close();
-            } catch (IOException e) {
-                System.out.println(e);
-            }
-        }
-        return position;
-    }
+    // no current usage of loading player position in rest of code
+    // public static int[] loadPlayerPosition(String filename) {
+        // int[] position = new int[2];
+        // BufferedReader br = null;
+        // try {
+            // br = new BufferedReader(new FileReader(filename));
+            // position[0] = Integer.parseInt(br.readLine());
+            // position[1] = Integer.parseInt(br.readLine());
+            // System.out.println("Game loaded!");
+        // } catch (IOException e) {
+            // System.out.println("Save failed to load");
+        // } finally {
+            // try {
+                // if (br != null) br.close();
+            // } catch (IOException e) {
+                // System.out.println(e);
+            // }
+        // }
+        // return position;
+    // }
 }

@@ -39,12 +39,19 @@ public class World {
     private final int MAP_WIDTH = 3200;
     private final int MAP_HEIGHT = 3200;
     private boolean spawnable = false;
-    Random rand = new Random();
+    private Random rand = new Random();
     private BufferedImage map = Utils.loadImage("maps/hometowndraft.png");
     private GameState state = GameState.GAME;
     private int spawnBound = 10;
     private int spawnDelay = 120;
     
+    /**
+     * Constructs a World object
+     * Creates a player with 3 followers
+     * Adds Juliette, Deni, and Colin as followers
+     * Creates the tinker NPC
+     * Loads hitboxes
+     */
     public World() {
         player = new Player(4);
         this.objects = new ArrayList<Drawable>();
@@ -71,8 +78,7 @@ public class World {
 
     }
 
-
-    public void spawnEnemy(int startX, int startY) {
+    private void spawnEnemy(int startX, int startY) {
         Enemy enemy = new Enemy(player);
         enemy.setX(startX);
         enemy.setY(startY);
@@ -81,13 +87,19 @@ public class World {
         this.obstacles.add(enemy);
     }
 
-    public void createNPC(String filename, int placementX, int placementY, int width, int height) {
+    private void createNPC(String filename, int placementX, int placementY, int width, int height) {
         NPC npc = new NPC(filename, placementX, placementY, width, height);
         objects.add(npc);
         interactables.add(npc);
         obstacles.add(npc);
     }
 
+    /**
+     * Loads the hitboxes onto the world
+     * Reads from hitboxes in resources to load them, hitboxes are 4 single space separated integers
+     * First integer is x, second is y, third is width, fourth is height
+     * Adds a block in the specifications, and only adds it to obstacles
+     */
     public void loadHitboxes() {
         try (BufferedReader br = new BufferedReader(new FileReader("./resources/hitboxes.txt"))) {
             String line;
@@ -110,6 +122,14 @@ public class World {
         }
     }
 
+    /**
+     * Draws the World
+     * Draws the map with camera adjustments
+     * Draws objects with camera adjustments
+     * Draws cutscene if there is one
+     * Draws the health bar
+     * @param g Graphics layer to draw on
+     */
     public void draw(Graphics2D g) {
         if (map != null) {
         g.drawImage(map, (int)(0 - cameraX + WIDTH/2), (int)(0 - cameraY + HEIGHT/2), null);
@@ -134,10 +154,10 @@ public class World {
         
     }
 
-    public void setGameState(GameState state) {
-        this.state = state;
-    }
-
+    /**
+     * Sets the cutscene of the world
+     * @param cutscene Cutscene that the world's cutscene will be set to
+     */
     public void setCutscene(Cutscene cutscene) {
         this.cutscene = cutscene;
     }
@@ -160,12 +180,25 @@ public class World {
         }
     }
 
+    /**
+     * Stops the player from moving if they have released their key
+     * @param keyChar Key that was released
+     */
     public void release(char keyChar) {
         if(keyChar == 'w' || keyChar == 'a' || keyChar == 's' || keyChar == 'd') {
             player.stopPlayer(keyChar);
         }
     }
     
+    /**
+     * Updates world
+     * Increments ticks, and spawns enemies inside the map but not on player every spawnDelay ticks
+     * Updates the camera to be on the player
+     * Updates the player and characters with obstacles
+     * Updates the enemies and makes them go towards the player
+     * Sorts objects using insertion sort, to maintain draw priority
+     * Updates cutscenes
+     */
     public void update() {
         ticks += 1;
         if (ticks % spawnDelay == 0) {
