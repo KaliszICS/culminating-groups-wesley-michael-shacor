@@ -178,7 +178,8 @@ public class Player extends Character{
 
     /**
      * Update the player
-     * @param objects Objects to check collisions with
+     * @param objects Drawables to check collisions with
+     * @param enemies Enemies to check collisions with and damage player
      */
     public void update(ArrayList<Drawable> objects, ArrayList<Enemy> enemies) {
         double minX = 1;
@@ -291,4 +292,5 @@ public class Player extends Character{
         }
         trail[0] = coords;
     }
+
 }
