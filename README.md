@@ -1,12 +1,14 @@
 This project is more focused on designing a game engine, and there is also a sample game that unfortunately could not be completed due to issues with art.
 
 This project can be run on Windows simply by running the .bat file.
+If you do not wish to use the .bat file, run these two commands in the main folder
+
+javac @files.txt -d target
+java -cp target game/Main
 
 Controls:
 "z" for interacting, "x" for cancelling
 "WASD" for movement, Arrow keys for menu movement
-
-Currently, there is only one NPC to talk to.
 
 The game is called "Run Away", and your goal is very simple. You must survive.
 Good luck!
