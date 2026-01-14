@@ -40,7 +40,7 @@ public class Screen extends Frame implements KeyListener {
         try{
             setIconImage(ImageIO.read(new File("./resources/thosewhoseedark.png")));
         }catch(Exception e){
-            System.out.println("Boop");
+            System.out.println("One (or more) resource files failed to load");
             System.exit(0);
         }
         addWindowListener(new WindowAdapter() {
@@ -114,8 +114,6 @@ public class Screen extends Frame implements KeyListener {
                 switch(e.getKeyCode()){
                     case KeyEvent.VK_UP: Main.menu.moveUp(); break;
                     case KeyEvent.VK_DOWN: Main.menu.moveDown(); break;
-                    case KeyEvent.VK_LEFT: Main.menu.moveLeft(); break;
-                    case KeyEvent.VK_RIGHT: Main.menu.moveRight(); break;
                     case KeyEvent.VK_Z: Main.menu.select(); break;
                     case KeyEvent.VK_X: Main.menu.cancel(); break;
                 }

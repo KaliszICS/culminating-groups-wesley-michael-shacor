@@ -1,5 +1,3 @@
-// send the marines
-
 package game;
 import game.menu.*;
 
@@ -65,5 +63,5 @@ public class Main{
 
     public static void swapToWorld(){
         state = State.WORLD;
-        }
+    }
 }

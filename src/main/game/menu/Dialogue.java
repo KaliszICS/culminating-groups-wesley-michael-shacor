@@ -4,6 +4,10 @@ import java.awt.Graphics2D;
 import game.Utils;
 
 public class Dialogue implements Menu{
+    /**
+     * @version 1.0
+     * @author Wesley, Michael, Shacor
+     */
     private boolean finished;
     private static final int WIDTH = 640;
     private static final int HEIGHT = 480;
@@ -16,6 +20,10 @@ public class Dialogue implements Menu{
     private String curtext;
     private int index;
     
+    /**
+     * Constructs a Dialogue box
+     * @param text The text to be displayed
+     */
     public Dialogue(String text){
         this.index = 0;
         this.curtext = "";
@@ -26,6 +34,9 @@ public class Dialogue implements Menu{
         Utils.drawTextBox(g, curtext, (WIDTH-BOX_WIDTH)/2, HEIGHT/4*3, BOX_WIDTH, BOX_HEIGHT, 0);
     }
 
+    /**
+     * Updates the dialogue box letter by letter
+     */
     public void update(){
         if(this.index < this.text.length()){
             this.curtext += this.text.charAt(this.index++);
@@ -46,6 +57,4 @@ public class Dialogue implements Menu{
 
     public void moveUp(){}
     public void moveDown(){}
-    public void moveLeft(){}
-    public void moveRight(){}
 }

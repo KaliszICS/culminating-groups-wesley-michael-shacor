@@ -18,11 +18,18 @@ import java.awt.geom.Rectangle2D;
 */
 
 public class OptionsMenu implements Menu{
+    /**
+     * @version 1.0
+     * @author Wesley, Michael, Shacor
+     */
     private Image selector;
     private static final int WIDTH = 640;
     private static final int HEIGHT = 480;
     private static final int SELECTOR_PADDING = 2;
     
+    /**
+     * Constructs a OptionsMenu
+     */
     public OptionsMenu(){
         this.selector = game.Utils.loadImage("selector.png");
     }
@@ -43,10 +50,16 @@ public class OptionsMenu implements Menu{
         g.drawImage(this.selector, (WIDTH-textWidth2)/2+textWidth2+SELECTOR_PADDING, 3*HEIGHT/4-textHeight+(textHeight-selector.getHeight(null))/2, null);
     }
 
+    /**
+     * Exits the game
+     */
     public void select(){
         System.exit(1);
     }
 
+    /**
+     * Returns to the main menu
+     */
     public void cancel(){
         game.Main.swapToMain();
     }
@@ -54,6 +67,4 @@ public class OptionsMenu implements Menu{
     public void update(){}
     public void moveUp(){}
     public void moveDown(){}
-    public void moveLeft(){}
-    public void moveRight(){}
 }

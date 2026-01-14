@@ -5,6 +5,10 @@ import java.util.Arrays;
 import game.menu.Dialogue;
 
 public class Player extends Character{
+    /**
+     * @version 1.0
+     * @author Wesley, Michael, Shacor
+     */
     public double[][] trail;
     private final static double INTERACTION_DISTANCE = 16;
     int upPrecedence;
@@ -18,6 +22,10 @@ public class Player extends Character{
     private double hitpoints = 500;
     private double percentHP;
 
+    /**
+     * Constructor for Player
+     * @param following The number of following characters
+     */
     public Player(int following) {
         super(new SpriteSheet("mc.png", 32, 32, 2.0, 0), 48, 58, 10, 6);
         this.trail = new double[following*TRAIL_SEPARATION][3];
@@ -27,18 +35,45 @@ public class Player extends Character{
         this.percentHP = this.hitpoints/this.maxHitpoints;
     }
 
+    /**
+     * Move the player based on key pressed
+     * @param key The key pressed
+     */
     public void movePlayer(char key) {
         switch(key){
-            case 'w': upPrecedence = downPrecedence+1; break;
-            case 's': downPrecedence = upPrecedence+1; break;
-            case 'a': leftPrecedence = rightPrecedence+1; break;
-            case 'd': rightPrecedence = leftPrecedence+1; break;
+            case 'w':
+                upPrecedence = downPrecedence+1; 
+                break;
+            case 's':
+                downPrecedence = upPrecedence+1;
+                break;
+            case 'a':
+                leftPrecedence = rightPrecedence+1;
+                break;
+            case 'd':
+                rightPrecedence = leftPrecedence+1;
+                break;
         }
-        if(key == 'w' || key == 's') yPrecedence = xPrecedence==1?xPrecedence++:1;
-        if(key == 'a' || key == 'd') xPrecedence = yPrecedence==1?yPrecedence++:1;
+        if(key == 'w' || key == 's') {
+            yPrecedence = 1;
+            if (xPrecedence == 1) {
+                xPrecedence++;
+            }
+
+        }
+        if(key == 'a' || key == 'd') {
+            xPrecedence = 1;
+            if (yPrecedence == 1) {
+                yPrecedence++;
+            }
+        }
         calculateFacing();
     }
 
+    /**
+     * Stop the player based on key released
+     * @param key The key released
+     */
     public void stopPlayer(char key) {
         switch(key){
             case 'w': upPrecedence = downPrecedence==2?--downPrecedence-1:0; break;
@@ -51,6 +86,10 @@ public class Player extends Character{
         calculateFacing();
     }
 
+    /**
+     * Interact with objects
+     * @param objects The list of interactable objects
+     */
     public void interact(ArrayList<Drawable> objects){
         for(Drawable object : objects){
             boolean inXRange = (object.getX() < x && x < object.getX() + object.getWidth()) || (object.getX() < x + width && x + width < object.getX() + object.getWidth());
@@ -61,7 +100,8 @@ public class Player extends Character{
                 }
                 case UP: if(inXRange && this.y - (object.getY() + object.getHeight()) > -1 && this.y - (object.getY() + object.getHeight()) < INTERACTION_DISTANCE) {
                     if (object instanceof NPC) {
-                    Main.world.setCutscene(new Cutscene(new ArrayList<>(Arrays.asList(new Dialogue("Hello there my friend, I am the tinker."),new Dialogue("Once upon a time, we envisioned:"), new Dialogue("this project becoming a complete story RPG"),new Dialogue("Unfortunately, with lacking art production, much had to be scrapped"), new Dialogue("Now, all you can do is survive."), new Dialogue("SURVIVE. That is the story of our world"),new Dialogue("Oops, I said too much."),new Dialogue("Anyways, this game is a proof of concept..."), new Dialogue("of what this program can do to design games in Java.")))));
+                        NPC npc = (NPC)object;
+                        Main.world.setCutscene(npc.interact());
                     }
                     break;
                 }
@@ -71,6 +111,9 @@ public class Player extends Character{
         }
     }
 
+    /**
+     * Calculate the facing direction
+     */
     private void calculateFacing(){
         if(this.yPrecedence >= this.xPrecedence){
             if(this.upPrecedence > this.downPrecedence){
@@ -87,15 +130,27 @@ public class Player extends Character{
         }
     }
 
+    /**
+     * Check if the player is moving
+     * @return Whether the player is moving
+     */
     public boolean isMoving(){
         return this.xPrecedence != this.yPrecedence;
     }
 
+    /**
+     * Get the percent hitpoints
+     * @return The percent hitpoints
+     */
     public double getPercentHitpoints(){
         return this.percentHP;
     }
 
-    public void update(ArrayList<Drawable> objects){
+    /**
+     * Update the player
+     * @param objects Objects to check collisions with
+     */
+    public void update(/*  Tile[][] map, */ArrayList<Drawable> objects, ArrayList<Enemy> enemies){
         double minX = 1;
         double minY = 1;
         boolean Xcollision = false;
@@ -104,18 +159,16 @@ public class Player extends Character{
         boolean moveDown = this.downPrecedence > this.upPrecedence;
         boolean moveLeft = this.leftPrecedence > this.rightPrecedence;
         boolean moveRight = this.rightPrecedence > this.leftPrecedence;
-        double speed = this.speed;
+        double speed = this.SPEED;
         if((moveUp || moveDown) && (moveLeft || moveRight)){
-            speed = diagSpeed;
+            speed = DIAG_SPEED;
         }
 
         for(Drawable object : objects){
             double Ty = collisionTime(object, false, speed, moveDown);
             if(Ty < minY){
-                if (!(object instanceof Enemy)) {
                 Ycollision = true;
                 minY = Ty;
-                }
             }
         }
         if(moveUp){
@@ -127,24 +180,19 @@ public class Player extends Character{
         for(Drawable object : objects){
             double Tx = collisionTime(object, true, speed, moveRight);
             if(Tx < minX){
-                if (!(object instanceof Enemy)) {
-                    Xcollision = true;
-                    minX = Tx;
-                }
+                Xcollision = true;
+                minX = Tx;
             }
         }
 
-        for(Drawable object : objects){
-            if (object instanceof Enemy) {
-                Enemy enemy = (Enemy)object;
-                double Tx = collisionTime(enemy, true, speed, moveRight);
-                double Ty = collisionTime(enemy, false, speed, moveDown);
-                if(Tx < 1 || Ty < 1){
-                    this.hitpoints -= enemy.getAttack();
-                    this.percentHP = this.hitpoints / this.maxHitpoints;
-                    if(this.hitpoints <= 0){
-                        Main.swapToDeath();
-                    }
+        for(Enemy enemy : enemies){
+            double Tx = collisionTime(enemy, true, speed, moveRight);
+            double Ty = collisionTime(enemy, false, speed, moveDown);
+            if(Tx < 1 || Ty < 1){
+                this.hitpoints -= enemy.getAttack();
+                this.percentHP = this.hitpoints / this.maxHitpoints;
+                if(this.hitpoints <= 0){
+                    Main.swapToDeath();
                 }
             }
         }
@@ -155,6 +203,7 @@ public class Player extends Character{
         }else if(moveRight){
             this.x += speed*minX;
         }
+
 
         if(xPrecedence != yPrecedence){
             boolean stop = false;

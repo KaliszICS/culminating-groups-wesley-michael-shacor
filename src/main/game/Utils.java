@@ -115,7 +115,7 @@ public final class Utils{
      * @param width width of the text box
      * @param height height of the text box
      * @param location Location of text, 0 is top left, 1 is top center, 2 is top right
-     * @return the Rectangle2D objectthat has been 
+     * @return the Rectangle2D object that has been 
      */
     public static Rectangle2D drawTextBox(Graphics2D g, String text, int x, int y, int width, int height, int location){
         Stroke temp = g.getStroke();
@@ -171,24 +171,4 @@ public final class Utils{
             }
         
     }
-    // no current usage of loading player position in rest of code
-    // public static int[] loadPlayerPosition(String filename) {
-        // int[] position = new int[2];
-        // BufferedReader br = null;
-        // try {
-            // br = new BufferedReader(new FileReader(filename));
-            // position[0] = Integer.parseInt(br.readLine());
-            // position[1] = Integer.parseInt(br.readLine());
-            // System.out.println("Game loaded!");
-        // } catch (IOException e) {
-            // System.out.println("Save failed to load");
-        // } finally {
-            // try {
-                // if (br != null) br.close();
-            // } catch (IOException e) {
-                // System.out.println(e);
-            // }
-        // }
-        // return position;
-    // }
 }

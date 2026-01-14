@@ -3,7 +3,12 @@ import java.awt.geom.Rectangle2D;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import game.Utils;
+
 public class LoadSaveMenu implements Menu {
+    /**
+     * @version 1.0
+     * @author Wesley, Michael, Shacor
+     */
     private int currentOption = 0;
     private static final int TOTAL_SAVES = 3;
 
@@ -17,10 +22,17 @@ public class LoadSaveMenu implements Menu {
 
     private String[] saves = {"", "", ""};
 
+    /**
+     * Constructs a LoadSaveMenu
+     */
     public LoadSaveMenu() {
         this.selector = game.Utils.loadImage("selector.png");
     }
 
+    /**
+     * Draws the load/save menu
+     * @param g The graphics context to draw on
+     */
     @Override
     public void draw(Graphics2D g) {
         for (int i = 0; i < TOTAL_SAVES; i++) {
@@ -41,25 +53,25 @@ public class LoadSaveMenu implements Menu {
     public void update() {
     }
 
+    /**
+     * Moves the selector up
+     */
     @Override
     public void moveUp() {
         if (currentOption > 0) currentOption--;
     }
 
+    /**
+     * Moves the selector down
+     */
     @Override
     public void moveDown() {
         if (currentOption < TOTAL_SAVES - 1) currentOption++;
     }
 
-    @Override
-    public void moveLeft() {
-
-    }
-
-    @Override
-    public void moveRight() {
-
-    }
+    /**
+     * Selects the current highlighted save slot
+     */
     @Override
     public void select() {
         if (saves[currentOption].equals("")) {
@@ -71,9 +83,17 @@ public class LoadSaveMenu implements Menu {
         game.Main.swapToWorld();
     }
 
+    /**
+     * Gets the load position
+     * @return The load position as an array [x, y]
+     */
     public int[] getLoadPosition() {
         return loadPosition;
     }
+
+    /**
+     * Cancels and returns to the main menu
+     */
     @Override
     public void cancel() {
         game.Main.swapToMain();

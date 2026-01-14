@@ -1,7 +1,11 @@
 package game;
 import java.awt.Graphics2D;
 
-public class Block implements Drawable{
+public class Block implements Drawable {
+    /**
+     * @version 1.0
+     * @author Wesley, Michael, Shacor
+     */
     public enum Type{
         RECTANGLE,
         CIRCLE
@@ -13,6 +17,14 @@ public class Block implements Drawable{
     private int height;
     private Type type;
     
+    /**
+     * Constructor for Block
+     * @param type The type of block
+     * @param x The x position
+     * @param y The y position
+     * @param width The width of the block
+     * @param height The height of the block
+     */
     public Block(Type type, double x, double y, int width, int height) {
         this.x = x;
         this.y = y;

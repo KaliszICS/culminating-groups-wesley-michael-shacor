@@ -1,6 +1,5 @@
 game/Block.java
 game/Drawable.java
-game/Movable.java
 game/Player.java
 game/Character.java
 game/Screen.java
