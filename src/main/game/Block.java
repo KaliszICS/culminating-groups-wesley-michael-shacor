@@ -1,11 +1,13 @@
 package game;
 import java.awt.Graphics2D;
 
+/**
+ * Defines a block
+ * @version 1.0
+ * @author Wesley, Michael, Shacor
+ */
+
 public class Block implements Drawable {
-    /**
-     * @version 1.0
-     * @author Wesley, Michael, Shacor
-     */
     public enum Type{
         RECTANGLE,
         CIRCLE
@@ -33,24 +35,29 @@ public class Block implements Drawable {
         this.type = type;
     }
     
+    @Override
     public double getX() {
         return this.x;
     }
 
+    @Override
     public double getY() {
         return this.y;
     }
 
+    @Override
     public int getWidth() {
         return this.width;
     }
 
+    @Override
     public int getHeight() {
         return this.height;
     }
 
+    @Override
     public void draw(Graphics2D g, double xoffset, double yoffset) {
-        switch(type){
+        switch(type) {
             case RECTANGLE:
                 g.fillRect((int)(this.x-xoffset), (int)(this.y-yoffset), this.width, this.height);
                 break;

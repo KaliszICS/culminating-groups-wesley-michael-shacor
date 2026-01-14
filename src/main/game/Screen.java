@@ -25,7 +25,6 @@ public class Screen extends Frame implements KeyListener {
     
     /** 
      * Constructs a Screen, of the size 640 x 480 pixels, which is not resizable
-     * Sets the screen icon to thosewhoseedark from the resource folder
      * Sets the background of the screen, and adds a keyListener to it
      */
     public Screen() {
@@ -39,7 +38,7 @@ public class Screen extends Frame implements KeyListener {
         setTitle("RUN AWAY");
         try{
             setIconImage(ImageIO.read(new File("./resources/thosewhoseedark.png")));
-        }catch(Exception e){
+        }catch(Exception e) {
             System.out.println("One (or more) resource files failed to load");
             System.exit(0);
         }
@@ -56,15 +55,11 @@ public class Screen extends Frame implements KeyListener {
     }
 
     /**
-     * Paints buffered images on the screen
-     * Checks to see if buffer is invalid
-     * If buffer is invalid, creates a new buffer
-     * Creates buffer graphics from buffer, in size of screen
-     * Sets game font in 24px, sets color, and draws depending on Main.state
-     * Draws buffer
+     * Paints base buffer of graphics on screen
+     * Sets game font size, sets color
      * @param g Graphics to be drawn upon
      */
-    public void paint(Graphics g){
+    public void paint(Graphics g) {
         if (buffer == null || buffer.getWidth() != getSize().width || buffer.getHeight() != getSize().height) {
             buffer = new BufferedImage(getSize().width, getSize().height, BufferedImage.TYPE_INT_ARGB);
         }
@@ -74,7 +69,7 @@ public class Screen extends Frame implements KeyListener {
         bufferG.setColor(new Color(0, 0, 0));
         bufferG.fillRect(0, 0, getSize().width, getSize().height);
         bufferG.setColor(Color.WHITE);
-        switch(Main.state){
+        switch(Main.state) {
             case WORLD:
                 Main.world.draw(bufferG);
                 break;
@@ -104,14 +99,14 @@ public class Screen extends Frame implements KeyListener {
      * @param e KeyEvent that is created every time a key is pressed
      */
     @Override
-    public void keyPressed(KeyEvent e){
+    public void keyPressed(KeyEvent e) {
         char keyChar = e.getKeyChar();
-        switch(Main.state){
+        switch(Main.state) {
             case WORLD:
                 Main.world.receiveKey(keyChar);
                 break;
             case MAIN_MENU: case LOAD_SAVE_MENU: case OPTIONS_MENU: case DEATH_MENU:
-                switch(e.getKeyCode()){
+                switch(e.getKeyCode()) {
                     case KeyEvent.VK_UP: Main.menu.moveUp(); break;
                     case KeyEvent.VK_DOWN: Main.menu.moveDown(); break;
                     case KeyEvent.VK_Z: Main.menu.select(); break;
@@ -126,8 +121,8 @@ public class Screen extends Frame implements KeyListener {
      * @param e KeyEvent that is created every time a key is released
      */
     @Override
-    public void keyReleased(KeyEvent e){
-        switch(Main.state){
+    public void keyReleased(KeyEvent e) {
+        switch(Main.state) {
             case WORLD:
                 Main.world.release(e.getKeyChar());
                 break;
@@ -138,7 +133,7 @@ public class Screen extends Frame implements KeyListener {
      * Inherited method that has no purpose
      */
     @Override
-    public void keyTyped(KeyEvent e){
+    public void keyTyped(KeyEvent e) {
 
     }
 

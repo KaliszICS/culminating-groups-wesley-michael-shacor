@@ -1,15 +1,17 @@
 package game.menu;
 import java.awt.Graphics2D;
 
+/**
+ * Defines a menu
+ * @version 1.0
+ * @author Wesley, Michael, Shacor
+ */
+
 public interface Menu {
-    /**
-     * @version 1.0
-     * @author Wesley, Michael, Shacor
-     */
 
     /**
      * Draw a menu
-     * @param g
+     * @param g Graphics layer to be drawn upon
      */
     public void draw(Graphics2D g);
 

@@ -1,11 +1,14 @@
 package game;
 import game.menu.*;
 import java.util.ArrayList;
+
+/**
+ * Defines a cutscene
+ * @version 1.0
+ * @author Wesley, Michael, Shacor
+ */
+
 public class Cutscene {
-    /**
-     * @version 1.0
-     * @author Wesley, Michael, Shacor
-     */
     private ArrayList<Dialogue> dialogue;
     private int currentScene = 0;
 
@@ -13,7 +16,7 @@ public class Cutscene {
      * Constructor for Cutscene
      * @param dialogue The dialogue for the cutscene
      */
-    public Cutscene(ArrayList<Dialogue> dialogue){
+    public Cutscene(ArrayList<Dialogue> dialogue) {
         this.dialogue = dialogue;
     }
 

@@ -4,13 +4,12 @@ import java.awt.geom.Rectangle2D;
 import java.awt.Image;
 import java.awt.Color;
 
-
-
-public class MainMenu implements Menu{
     /**
+     * Defines a main menu
      * @version 1.0
      * @author Wesley, Michael, Shacor
      */
+public class MainMenu implements Menu{
     private Image title;
     private Image selector;
     private double[][] stuff;
@@ -18,12 +17,12 @@ public class MainMenu implements Menu{
     /**
      * Constructs a MainMenu
      */
-    public MainMenu(){
+    public MainMenu() {
         this.title = game.Utils.loadImage("thosewhosee.png");
         this.selector = game.Utils.loadImage("selector.png");
         this.stuff = new double[WIDTH/STUFF_DIST * HEIGHT/STUFF_DIST][3];
-        for(int i = 0; i < WIDTH/STUFF_DIST; i++){
-            for(int j = 0; j < HEIGHT/STUFF_DIST; j++){
+        for (int i = 0; i < WIDTH/STUFF_DIST; i++) {
+            for (int j = 0; j < HEIGHT/STUFF_DIST; j++) {
                 this.stuff[i*HEIGHT/STUFF_DIST+j] = new double[]{i*STUFF_DIST+Math.random()*STUFF_DIST, j*STUFF_DIST+Math.random()*STUFF_DIST, Math.random()*Math.PI};
             }
         }
@@ -41,11 +40,13 @@ public class MainMenu implements Menu{
     final static int OPTIONS = 2;
     final static int STUFF_DIST = 100;
     final static int STUFF_SIZE = 5;
+    final static Color color = new Color(145,145,145);
     int currentOption = 0;
 
-    public void draw(Graphics2D g){
-        g.setColor(new Color(145, 145, 145));
-        for(int i = 0; i < stuff.length; i++){
+    @Override
+    public void draw(Graphics2D g) {
+        g.setColor(color);
+        for (int i = 0; i < stuff.length; i++) {
             g.rotate(stuff[i][2], (int)stuff[i][0]+STUFF_SIZE/2, (int)stuff[i][1]+STUFF_SIZE/2);
             g.fillRect((int)stuff[i][0], (int)stuff[i][1], STUFF_SIZE, STUFF_SIZE);
             g.rotate(-stuff[i][2], (int)stuff[i][0]+STUFF_SIZE/2, (int)stuff[i][1]+STUFF_SIZE/2);
@@ -53,9 +54,9 @@ public class MainMenu implements Menu{
         g.drawImage(this.title, (WIDTH-TITLE_WIDTH)/2, (HEIGHT-TITLE_HEIGHT)/5, null);
         Rectangle2D start = game.Utils.drawTextBox(g, "START", (WIDTH-BUTTON_WIDTH)/2, (HEIGHT-BUTTON_HEIGHT)/4*2, BUTTON_WIDTH, BUTTON_HEIGHT, 1);
         Rectangle2D options = game.Utils.drawTextBox(g, "OPTIONS", (WIDTH-BUTTON_WIDTH)/2, (HEIGHT-BUTTON_HEIGHT)/4*3, BUTTON_WIDTH, BUTTON_HEIGHT, 1);
-        if(currentOption == 0){ 
+        if (currentOption == 0) { 
             g.drawImage(this.selector, (int)start.getMaxX() + SELECT_PADDING, (int)(start.getMinY()-start.getHeight())-SELECT_HEIGHT/3, null);
-        }else{
+        } else {
             g.drawImage(this.selector, (int)options.getMaxX() + SELECT_PADDING, (int)(options.getMinY()-options.getHeight())-SELECT_HEIGHT/3, null);
         }
     }
@@ -63,39 +64,43 @@ public class MainMenu implements Menu{
     /**
      * Updates the main menu
      */
-    public void update(){
-        for(int i = 0; i < stuff.length; i++){
+    @Override
+    public void update() {
+        for (int i = 0; i < stuff.length; i++) {
             stuff[i][0] -= (Math.random())*4;
             stuff[i][1] += (Math.random())*4;
-            if(stuff[i][0] < 0) stuff[i][0] = WIDTH;
-            if(stuff[i][1] > HEIGHT) stuff[i][1] = 0;
+            if (stuff[i][0] < 0) stuff[i][0] = WIDTH;
+            if (stuff[i][1] > HEIGHT) stuff[i][1] = 0;
             stuff[i][2] += (Math.random())*0.1;
-            if(stuff[i][2] > Math.PI) stuff[i][2] -= Math.PI;
+            if (stuff[i][2] > Math.PI) stuff[i][2] -= Math.PI;
         }
     }
 
     /**
      * Selects the current option
      */
-    public void select(){
-        if(currentOption == 0){
+    @Override
+    public void select() {
+        if (currentOption == 0) {
             game.Main.swapToSave();
-        }else{
+        } else {
             game.Main.swapToOptions();
         }
     }
 
-    public void cancel(){
+    public void cancel() {
     }
 
-    public void moveUp(){
-        if(currentOption > 0){
+    @Override
+    public void moveUp() {
+        if (currentOption > 0) {
             currentOption--;
         }
     }
 
-    public void moveDown(){
-        if(currentOption < OPTIONS-1){
+    @Override
+    public void moveDown() {
+        if (currentOption < OPTIONS-1) {
             currentOption++;
         }
     }

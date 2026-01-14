@@ -18,8 +18,8 @@ public class Player extends Character{
     int xPrecedence;
     int yPrecedence;
     private static final int UP = 3, DOWN = 0, RIGHT = 2, LEFT = 1;
-    private double maxHitpoints = 500;
-    private double hitpoints = 500;
+    private final int MAX_HITPOINTS = 500;
+    private double hitpoints = MAX_HITPOINTS;
     private double percentHP;
 
     /**
@@ -27,12 +27,12 @@ public class Player extends Character{
      * @param following The number of following characters
      */
     public Player(int following) {
-        super(new SpriteSheet("mc.png", 32, 32, 2.0, 0), 48, 58, 10, 6);
+        super(new SpriteSheet("mc.png", 0), 48, 58, 10, 6);
         this.trail = new double[following*TRAIL_SEPARATION][3];
-        for(int i = 0; i < following*TRAIL_SEPARATION; i++){
+        for (int i = 0; i < following*TRAIL_SEPARATION; i++) {
             this.trail[i] = new double[]{this.x, this.y, this.facing};
         }
-        this.percentHP = this.hitpoints/this.maxHitpoints;
+        this.percentHP = this.hitpoints/this.MAX_HITPOINTS;
     }
 
     /**
@@ -40,7 +40,7 @@ public class Player extends Character{
      * @param key The key pressed
      */
     public void movePlayer(char key) {
-        switch(key){
+        switch(key) {
             case 'w':
                 upPrecedence = downPrecedence+1; 
                 break;
@@ -54,14 +54,14 @@ public class Player extends Character{
                 rightPrecedence = leftPrecedence+1;
                 break;
         }
-        if(key == 'w' || key == 's') {
+        if (key == 'w' || key == 's') {
             yPrecedence = 1;
             if (xPrecedence == 1) {
                 xPrecedence++;
             }
 
         }
-        if(key == 'a' || key == 'd') {
+        if (key == 'a' || key == 'd') {
             xPrecedence = 1;
             if (yPrecedence == 1) {
                 yPrecedence++;
@@ -75,14 +75,44 @@ public class Player extends Character{
      * @param key The key released
      */
     public void stopPlayer(char key) {
-        switch(key){
-            case 'w': upPrecedence = downPrecedence==2?--downPrecedence-1:0; break;
-            case 's': downPrecedence = upPrecedence==2?--upPrecedence-1:0; break;
-            case 'a': leftPrecedence = rightPrecedence==2?--rightPrecedence-1:0; break;
-            case 'd': rightPrecedence = leftPrecedence==2?--leftPrecedence-1:0; break;
+        switch(key) {
+            case 'w':
+                upPrecedence = 0;
+                if (downPrecedence == 2) {
+                    downPrecedence--;
+                }
+                break; 
+            case 's':
+                downPrecedence = 0;
+                if (upPrecedence == 2) {
+                    upPrecedence--;
+                }
+                break;
+            case 'a':
+                leftPrecedence = 0;
+                if (rightPrecedence == 2) {
+                    rightPrecedence--;
+                }
+                break;
+            case 'd':
+                rightPrecedence = 0;
+                if (leftPrecedence == 2) {
+                    leftPrecedence--;
+                }
+                break;
         }
-        if(yPrecedence > 0 && upPrecedence == downPrecedence) yPrecedence = xPrecedence==2?--xPrecedence-1:0;
-        if(xPrecedence > 0 && leftPrecedence == rightPrecedence) xPrecedence = yPrecedence==2?--yPrecedence-1:0;
+        if (yPrecedence > 0 && upPrecedence == downPrecedence) {
+            yPrecedence = 0;
+            if (xPrecedence == 2) {
+                xPrecedence--;
+            }
+        }
+        if (xPrecedence > 0 && leftPrecedence == rightPrecedence) {
+            xPrecedence = 0;
+            if (yPrecedence == 2) {
+                yPrecedence--;
+            }
+        }
         calculateFacing();
     }
 
@@ -90,41 +120,41 @@ public class Player extends Character{
      * Interact with objects
      * @param objects The list of interactable objects
      */
-    public void interact(ArrayList<Drawable> objects){
-        for(Drawable object : objects){
+    public void interact(ArrayList<Drawable> objects) {
+        for (Drawable object : objects) {
             boolean inXRange = (object.getX() < x && x < object.getX() + object.getWidth()) || (object.getX() < x + width && x + width < object.getX() + object.getWidth());
             boolean inYRange = (object.getY() < y && y < object.getY() + object.getHeight()) || (object.getY() < y + height && y + height < object.getY() + object.getHeight());
-            switch(facing){
-                case DOWN: if(inXRange && object.getY() - (this.y+this.height) > -1 && object.getY() - (this.y+this.height) < INTERACTION_DISTANCE) {
+            switch(facing) {
+                case DOWN: if (inXRange && object.getY() - (this.y+this.height) > -1 && object.getY() - (this.y+this.height) < INTERACTION_DISTANCE) {
                     break;
                 }
-                case UP: if(inXRange && this.y - (object.getY() + object.getHeight()) > -1 && this.y - (object.getY() + object.getHeight()) < INTERACTION_DISTANCE) {
+                case UP: if (inXRange && this.y - (object.getY() + object.getHeight()) > -1 && this.y - (object.getY() + object.getHeight()) < INTERACTION_DISTANCE) {
                     if (object instanceof NPC) {
                         NPC npc = (NPC)object;
                         Main.world.setCutscene(npc.interact());
                     }
                     break;
                 }
-                case RIGHT: if(inYRange && object.getX() - (this.x+this.width) > -1 && object.getX() - (this.x+this.width) < INTERACTION_DISTANCE) break;
-                case LEFT: if(inYRange && this.x - (object.getX() + object.getWidth()) > -1 && this.x - (object.getX() + object.getWidth()) < INTERACTION_DISTANCE) break;
+                case RIGHT: if (inYRange && object.getX() - (this.x+this.width) > -1 && object.getX() - (this.x+this.width) < INTERACTION_DISTANCE) break;
+                case LEFT: if (inYRange && this.x - (object.getX() + object.getWidth()) > -1 && this.x - (object.getX() + object.getWidth()) < INTERACTION_DISTANCE) break;
             }
         }
     }
 
     /**
-     * Calculate the facing direction
+     * Calculate the direction the player is facing in
      */
-    private void calculateFacing(){
-        if(this.yPrecedence >= this.xPrecedence){
-            if(this.upPrecedence > this.downPrecedence){
+    private void calculateFacing() {
+        if (this.yPrecedence >= this.xPrecedence) {
+            if (this.upPrecedence > this.downPrecedence) {
                 this.facing = UP;
-            }else if(this.downPrecedence > this.upPrecedence){
+            } else if (this.downPrecedence > this.upPrecedence) {
                 this.facing = DOWN;
             }
-        }else if(this.xPrecedence > this.yPrecedence){
-            if(this.rightPrecedence > this.leftPrecedence){
+        } else if (this.xPrecedence > this.yPrecedence) {
+            if (this.rightPrecedence > this.leftPrecedence) {
                 this.facing = RIGHT;
-            }else if(this.leftPrecedence > this.rightPrecedence){
+            } else if (this.leftPrecedence > this.rightPrecedence) {
                 this.facing = LEFT;
             }
         }
@@ -134,7 +164,7 @@ public class Player extends Character{
      * Check if the player is moving
      * @return Whether the player is moving
      */
-    public boolean isMoving(){
+    public boolean isMoving() {
         return this.xPrecedence != this.yPrecedence;
     }
 
@@ -142,7 +172,7 @@ public class Player extends Character{
      * Get the percent hitpoints
      * @return The percent hitpoints
      */
-    public double getPercentHitpoints(){
+    public double getPercentHitpoints() {
         return this.percentHP;
     }
 
@@ -150,7 +180,7 @@ public class Player extends Character{
      * Update the player
      * @param objects Objects to check collisions with
      */
-    public void update(/*  Tile[][] map, */ArrayList<Drawable> objects, ArrayList<Enemy> enemies){
+    public void update(ArrayList<Drawable> objects, ArrayList<Enemy> enemies) {
         double minX = 1;
         double minY = 1;
         boolean Xcollision = false;
@@ -160,103 +190,103 @@ public class Player extends Character{
         boolean moveLeft = this.leftPrecedence > this.rightPrecedence;
         boolean moveRight = this.rightPrecedence > this.leftPrecedence;
         double speed = this.SPEED;
-        if((moveUp || moveDown) && (moveLeft || moveRight)){
+        if ((moveUp || moveDown) && (moveLeft || moveRight)) {
             speed = DIAG_SPEED;
         }
 
-        for(Drawable object : objects){
+        for (Drawable object : objects) {
             double Ty = collisionTime(object, false, speed, moveDown);
-            if(Ty < minY){
+            if (Ty < minY) {
                 Ycollision = true;
                 minY = Ty;
             }
         }
-        if(moveUp){
+        if (moveUp) {
             this.y -= speed*minY;
-        }else if(moveDown){
+        } else if (moveDown) {
             this.y += speed*minY;
         }
 
-        for(Drawable object : objects){
+        for (Drawable object : objects) {
             double Tx = collisionTime(object, true, speed, moveRight);
-            if(Tx < minX){
+            if (Tx < minX) {
                 Xcollision = true;
                 minX = Tx;
             }
         }
 
-        for(Enemy enemy : enemies){
+        for (Enemy enemy : enemies) {
             double Tx = collisionTime(enemy, true, speed, moveRight);
             double Ty = collisionTime(enemy, false, speed, moveDown);
-            if(Tx < 1 || Ty < 1){
+            if (Tx < 1 || Ty < 1) {
                 this.hitpoints -= enemy.getAttack();
-                this.percentHP = this.hitpoints / this.maxHitpoints;
-                if(this.hitpoints <= 0){
+                this.percentHP = this.hitpoints / this.MAX_HITPOINTS;
+                if (this.hitpoints <= 0) {
                     Main.swapToDeath();
                 }
             }
         }
 
 
-        if(moveLeft){
+        if (moveLeft) {
             this.x -= speed*minX;
-        }else if(moveRight){
+        } else if (moveRight) {
             this.x += speed*minX;
         }
 
 
-        if(xPrecedence != yPrecedence){
+        if (xPrecedence != yPrecedence) {
             boolean stop = false;
-            if(xPrecedence > yPrecedence){
-                if(Xcollision && !Ycollision){
-                    if(moveUp){
+            if (xPrecedence > yPrecedence) {
+                if (Xcollision && !Ycollision) {
+                    if (moveUp) {
                         facing = UP;
-                    }else if(moveDown){
+                    } else if (moveDown) {
                         facing = DOWN;
-                    }else if(moveLeft || moveRight) stop = true;
+                    } else if (moveLeft || moveRight) stop = true;
                 }
-            }else if(yPrecedence >= xPrecedence){
-                if(!Xcollision && Ycollision){
-                    if(moveLeft){
+            } else if (yPrecedence >= xPrecedence) {
+                if (!Xcollision && Ycollision) {
+                    if (moveLeft) {
                         facing = LEFT;
-                    }else if(moveRight){
+                    } else if (moveRight) {
                         facing = RIGHT;
-                    }else if(moveUp || moveDown) stop = true;
+                    } else if (moveUp || moveDown) stop = true;
                 }
             }
-            if(stop){
+            if (stop) {
                 sprite = spriteSheet.getAnim(facing)[1];
                 back = true;
                 animationCycle = ANIMATION_FRAMES/3;
-            }else{
+            } else {
                 sprite = spriteSheet.getAnim(facing)[2-animationCycle/(ANIMATION_FRAMES/3)];
-                if(back){
-                    if(animationCycle == 0){
+                if (back) {
+                    if (animationCycle == 0) {
                         back = false;
-                    }else{
+                    } else {
                         animationCycle--;
                     }
-                }else{
-                    if(animationCycle == ANIMATION_FRAMES-1){
+                } else {
+                    if (animationCycle == ANIMATION_FRAMES-1) {
                         back = true;
-                    }else{
+                    } else {
                         animationCycle++;
                     }
                 }
             }
-        }else{
+        } else {
             sprite = spriteSheet.getAnim(facing)[1];
             back = true;
             animationCycle = ANIMATION_FRAMES/3;
         }
         double[] vals = trail[0];
-        if(Math.sqrt(Math.pow(vals[0]-x, 2) + Math.pow(vals[1]-y, 2)) > 1){
+        if (Math.sqrt(Math.pow(vals[0]-x, 2) + Math.pow(vals[1]-y, 2)) > 1) {
             addToTrail(new double[]{(double)x, (double)y, this.facing});
         }
     }
 
-    private void addToTrail(double[] coords){
-        for(int i = trail.length-1; i > 0; i--){
+    private void addToTrail(double[] coords) {
+        for (int i = trail.length-1; i > 0; i--) {
             trail[i] = trail[i-1];
         }
         trail[0] = coords;

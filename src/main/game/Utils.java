@@ -29,7 +29,7 @@ public final class Utils{
     private static final int TEXT_PADDING_X = 10;
     private static final int TEXT_PADDING_Y = 2;
     public static Font mainFont;
-    public static BufferedImage loadImage(String filename){
+    public static BufferedImage loadImage(String filename) {
         try {
             return ImageIO.read(new File("./resources/" + filename));
         } catch (Exception e) {
@@ -46,7 +46,7 @@ public final class Utils{
      * @param scale Scale factor to multiply image size
      * @return the Image that has been loaded, null if an exception occurs
      */
-    public static Image loadImage(String filename, int x, int y, int scale){
+    public static Image loadImage(String filename, int x, int y, int scale) {
         try {
             BufferedImage all = ImageIO.read(new File("./resources/" + filename));
             BufferedImage bimg = all.getSubimage(x*32, y*32, 32, 32);
@@ -68,12 +68,12 @@ public final class Utils{
      * @param offset Integer denoting the x offset of the spritesheet
      * @return the loaded spritesheet as a 2D BufferedImage array
      */
-    public static BufferedImage[][] loadSpriteSheet(String filename, int width, int height, double scale, int offset){
+    public static BufferedImage[][] loadSpriteSheet(String filename, int width, int height, double scale, int offset) {
         try {
             BufferedImage all = ImageIO.read(new File("./resources/" + filename));
             BufferedImage[][] sprites = new BufferedImage[4][3];
-            for(int i = 0; i < 3*width; i += width){
-                for(int j = 0; j < 4*height; j += height){
+            for (int i = 0; i < 3*width; i += width) {
+                for (int j = 0; j < 4*height; j += height) {
                     BufferedImage bimg = all.getSubimage(3*width*offset+i, j, width, height);
                     int newWidth = (int)(width*scale);
                     int newHeight = (int)(height*scale);
@@ -97,7 +97,7 @@ public final class Utils{
     /**
      * Loads the Gamefont, found in resources
      */
-    public static void loadFonts(){
+    public static void loadFonts() {
         try {
             mainFont = Font.createFont(Font.TRUETYPE_FONT, new File("./resources/Gamefont-Regular.ttf"));
         } catch (Exception e) {
@@ -108,6 +108,7 @@ public final class Utils{
 
     /**
      * Draws a textbox
+     * Uses various text padding variables to create standard textboxes
      * @param g 2D Graphics layer to be drawn on
      * @param text Text to be drawn
      * @param x left-most x coordinates of the text box
@@ -115,9 +116,9 @@ public final class Utils{
      * @param width width of the text box
      * @param height height of the text box
      * @param location Location of text, 0 is top left, 1 is top center, 2 is top right
-     * @return the Rectangle2D object that has been 
+     * @return the Rectangle2D object that has been created
      */
-    public static Rectangle2D drawTextBox(Graphics2D g, String text, int x, int y, int width, int height, int location){
+    public static Rectangle2D drawTextBox(Graphics2D g, String text, int x, int y, int width, int height, int location) {
         Stroke temp = g.getStroke();
         g.setStroke(new BasicStroke(BOX_THICKNESS));
         g.setColor(Color.BLACK);
@@ -128,7 +129,7 @@ public final class Utils{
         int textWidth = (int)rect.getWidth();
         int textHeight = (int)rect.getHeight();
         g.setStroke(temp);
-        switch(location){
+        switch(location) {
             case 0: // top left
                 g.drawString(text, x+TEXT_PADDING_X, y+textHeight+TEXT_PADDING_Y);
                 rect.setRect(x+TEXT_PADDING_X, y+textHeight+TEXT_PADDING_Y, textWidth, textHeight);

@@ -4,6 +4,11 @@ import java.util.ArrayList;
 import java.awt.Image;
 import java.awt.Graphics2D;
 
+/**
+ * Defines an enemy
+ * @version 1.0
+ * @author Wesley, Michael, Shacor
+ */
 public class Enemy extends Moveable implements Drawable{
     private int upPrecedence;
     private int downPrecedence;
@@ -14,6 +19,7 @@ public class Enemy extends Moveable implements Drawable{
     private Player player;
     private static final int UP = 3, DOWN = 0, RIGHT = 2, LEFT = 1;
     private int attack = 1;
+    private static final double SPEED = 2;
     private double speed;
     private double diagSpeed;
     private static final Image[] sprites = {
@@ -52,16 +58,31 @@ public class Enemy extends Moveable implements Drawable{
         this.height = 64;
         this.diagSpeed = 2*Math.sqrt(speed);
     }
-    
-    public double getX(){return this.x;}
-    public double getY(){return this.y;}
-    public void setX(double x){this.x = x;}
-    public void setY(double y){this.y = y;}
-    public int getWidth(){return this.width;}
-    public int getHeight(){return this.height;}
+    @Override
+    public double getX() {
+        return this.x;
+    }
+    @Override
+    public double getY() {
+        return this.y;
+    }
+    public void setX(double x) {
+        this.x = x;
+    }
+    public void setY(double y) {
+        this.y = y;
+    }
+    @Override
+    public int getWidth() {
+        return this.width;
+    }
+    @Override
+    public int getHeight() {
+        return this.height;
+    }
     
     /**
-     * Make the enemy attack the player
+     * Makes the enemy attack the player
      */
     public void attackPlayer() {
         this.leftPrecedence = 0;
@@ -84,16 +105,17 @@ public class Enemy extends Moveable implements Drawable{
         return this.attack;
     }
 
-
+    @Override
     public void draw(Graphics2D g, double xoffset, double yoffset) {
         g.drawImage(sprite, (int)(x-xoffset-(64-width)/2), (int)(y-yoffset), null);
     }
 
     /**
-     * Update the enemy
-     * @param objects
+     * Updates the enemy, checks for collisions with hitboxes
+     * @param objects Drawables to be passed in and checked for collision to not pass through hitboxes
+     * @param enemies Enemies to be passed in and checked for collision
      */
-    public void update(ArrayList<Drawable> objects, ArrayList<Enemy> enemies){
+    public void update(ArrayList<Drawable> objects, ArrayList<Enemy> enemies) {
         double minX = 1;
         double minY = 1;
         boolean moveUp = this.upPrecedence > this.downPrecedence;
@@ -101,47 +123,47 @@ public class Enemy extends Moveable implements Drawable{
         boolean moveLeft = this.leftPrecedence > this.rightPrecedence;
         boolean moveRight = this.rightPrecedence > this.leftPrecedence;
         double speed = this.speed;
-        if((moveUp || moveDown) && (moveLeft || moveRight)){
+        if ((moveUp || moveDown) && (moveLeft || moveRight)) {
             speed = diagSpeed;
         }
-        for(Drawable object : objects){
+        for (Drawable object : objects) {
             double Ty = collisionTime(object, false, speed, moveDown);
-            if(Ty < minY){
+            if (Ty < minY) {
                 minY = Ty;
             }
         }
-        for(Drawable enemy : enemies){
+        for (Drawable enemy : enemies) {
             double Ty = collisionTime(enemy, false, speed, moveDown);
-            if(Ty < minY){
+            if (Ty < minY) {
                 minY = Ty;
             }
         }
-        if(moveUp){
+        if (moveUp) {
             this.y -= speed*minY;
-        }else if(moveDown){
+        } else if (moveDown) {
             this.y += speed*minY;
         }
 
-        for(Drawable object : objects){
+        for (Drawable object : objects) {
             double Tx = collisionTime(object, true, speed, moveRight);
-            if(Tx < minX){
+            if (Tx < minX) {
                 minX = Tx;
             }
         }
         
-        for(Drawable enemy : enemies){
+        for (Drawable enemy : enemies) {
             double Tx = collisionTime(enemy, true, speed, moveRight);
-            if(Tx < minX){
+            if (Tx < minX) {
                 minX = Tx;
             }
         }
 
-        if(moveLeft) {
+        if (moveLeft) {
             this.x -= speed*minX;
-        }else if(moveRight){
+        } else if (moveRight) {
             this.x += speed*minX;
         }
     }
 
-    public void update(ArrayList<Drawable> objects){}
+    public void update(ArrayList<Drawable> objects) {}
 }

@@ -38,14 +38,19 @@ public class World {
     private ArrayList<Enemy> enemies;
     private Cutscene cutscene;
     private int ticks = 0;
-    private final int SPAWN_DISTANCE = 100;
-    private final int MAP_WIDTH = 3200;
-    private final int MAP_HEIGHT = 3200;
+    private final static int SPAWN_DISTANCE = 100;
+    private final static int MAP_WIDTH = 3200;
+    private final static int MAP_HEIGHT = 3200;
     private boolean spawnable = false;
     private Random rand = new Random();
     private BufferedImage map = Utils.loadImage("maps/hometowndraft.png");
-    private int spawnBound = 40;
-    private final int spawnDelay = 100;
+    private final static int SPAWN_BOUND = 40;
+    private final static int SPAWN_DELAY = 100;
+    private final int SPRITE_SIZE = 32;
+    private final static int HEALTH_X = 20;
+    private final static int HEALTH_Y = 20;
+    private final static int HEALTH_WIDTH = 200;
+    private final static int HEALTH_HEIGHT = 20;
     
     /**
      * Constructs a World object
@@ -74,7 +79,7 @@ public class World {
         this.objects.add(colin);
         this.objects.add(deni);
         this.objects.add(player);
-        createNPC("tinker.png", 360, 1300, 32, 32);
+        createNPC("tinker.png", 360, 1300, SPRITE_SIZE, SPRITE_SIZE);
         loadHitboxes();
     }
 
@@ -129,21 +134,17 @@ public class World {
         if (map != null) {
             g.drawImage(map, (int)(0 - cameraX + WIDTH/2), (int)(0 - cameraY + HEIGHT/2), null);
         }
-        for(Drawable d : objects) {
+        for (Drawable d : objects) {
             d.draw(g, cameraX-WIDTH/2, cameraY-HEIGHT/2);
         }
         if (this.cutscene != null) {
             this.cutscene.getScene().draw(g);
         }
-        int healthX = 20;
-        int healthY = 20;
-        int healthWidth = 200;
-        int healthHeight = 20;
         g.setColor(Color.BLACK);
-        g.drawRect(healthX,healthY,healthWidth,healthHeight);
-        int fillWidth = (int)(healthWidth * player.getPercentHitpoints());
+        g.drawRect(HEALTH_X,HEALTH_Y,HEALTH_WIDTH,HEALTH_HEIGHT);
+        int fillWidth = (int)(HEALTH_WIDTH * player.getPercentHitpoints());
         g.setColor(Color.RED);
-        g.fillRect(healthX + 1, healthY + 1, fillWidth - 1, healthHeight - 1);
+        g.fillRect(HEALTH_X + 1, HEALTH_Y + 1, fillWidth - 1, HEALTH_HEIGHT - 1);
     }
 
     /**
@@ -156,7 +157,7 @@ public class World {
 
     public void receiveKey(char keyChar) {
         if (cutscene != null) {
-            if(keyChar == 'z' && this.cutscene.nextScene()) {
+            if (keyChar == 'z' && this.cutscene.nextScene()) {
                 this.cutscene = null;
             }
         } else {
@@ -181,25 +182,25 @@ public class World {
      * Updates the camera to be on the player
      * Updates the player and characters with obstacles
      * Updates the enemies and makes them go towards the player
-     * Sorts objects using insertion sort, to maintain draw priority
+     * Sorts objects using insertion sort to maintain draw priority
      * Updates cutscenes
      */
     public void update() {
         ticks += 1;
-        if (ticks % spawnDelay == 0) {
+        if (ticks % SPAWN_DELAY == 0) {
             while (true) {
-                int enemyX = rand.nextInt(MAP_WIDTH-2*spawnBound)+spawnBound;
-                int enemyY = rand.nextInt(MAP_HEIGHT-2*spawnBound)+spawnBound;
+                int enemyX = rand.nextInt(MAP_WIDTH-2*SPAWN_BOUND)+SPAWN_BOUND;
+                int enemyY = rand.nextInt(MAP_HEIGHT-2*SPAWN_BOUND)+SPAWN_BOUND;
                 if (Math.pow((Math.pow((enemyY - player.getY()),2)+Math.pow((enemyX-player.getX()),2)),0.5) < SPAWN_DISTANCE) continue;
                 Enemy checker = new Enemy(player);
                 checker.setX(enemyX);
                 checker.setY(enemyY);
                 boolean spawning = true;
-                for(Drawable object : objects){
-                    if(object != player){
+                for (Drawable object : objects) {
+                    if (object != player) {
                         double tx = checker.collisionTime(object, true, 0, true);
                         double ty = checker.collisionTime(object, false, 0, true);
-                        if(tx < 1 || ty < 1){
+                        if (tx < 1 || ty < 1) {
                             spawning = false;
                             break;
                         }
@@ -214,17 +215,17 @@ public class World {
         this.cameraX -= (this.cameraX - this.player.getX())*0.1;
         this.cameraY -= (this.cameraY - this.player.getY())*0.1;
         player.update(obstacles, enemies);
-        for(Character c : characters){
+        for (Character c : characters) {
             c.update(obstacles);
         }
-        for(Enemy e : enemies){
+        for (Enemy e : enemies) {
             e.attackPlayer();
             e.update(obstacles, enemies);
         }
         for (int i = 1;i<objects.size();i++) {
 			Drawable key = objects.get(i);
 			int index = i-1;
-			while (index >= 0 && key.getY() > objects.get(i).getY()) {
+			while (index >= 0 && key.getY() < objects.get(index).getY()) {
 				objects.set(index+1, objects.get(index));
 				index--;
 			}

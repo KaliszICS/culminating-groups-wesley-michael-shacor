@@ -1,6 +1,11 @@
 package game;
 import java.util.ArrayList;
 
+/**
+ * Defines a movable object
+ * @version 1.0
+ * @author Wesley, Michael, Shacor
+ */
 public abstract class Moveable{
     protected double x, y;
     protected int width, height;
@@ -8,20 +13,39 @@ public abstract class Moveable{
     /**
      * Calculate time an objects collides for
      * @param object The object to check collision with
-     * @param xAxis Whether to check x axis
+     * @param xAxis Whether to check x axis first
      * @param speed The speed of the object
      * @param plusminus Whether to check positive or negative direction
      * @return The time of collision
      */
-    protected double collisionTime(Drawable object, boolean xAxis, double speed, boolean plusminus){
-        double axisMinThis = xAxis ? this.x : this.y;
-        double axisMaxThis = xAxis ? this.x + this.width : this.y + this.height;
-        double axisMinOther = xAxis ? object.getX() : object.getY();
-        double axisMaxOther = xAxis ? object.getX() + object.getWidth() : object.getY() + object.getHeight();
-        double orthoMinThis = xAxis ? this.y : this.x;
-        double orthoMaxThis = xAxis ? this.y + this.height : this.x + this.width;
-        double orthoMinOther = xAxis ? object.getY() : object.getX();
-        double orthoMaxOther = xAxis ? object.getY() + object.getHeight() : object.getX() + object.getWidth();
+    protected double collisionTime(Drawable object, boolean xAxis, double speed, boolean plusminus) {
+        double axisMinThis;
+        double axisMaxThis;
+        double axisMinOther;
+        double axisMaxOther;
+        double orthoMinThis;
+        double orthoMaxThis;
+        double orthoMinOther;
+        double orthoMaxOther;
+            if (xAxis) {
+                axisMinThis = this.x;
+                axisMaxThis = this.x + this.width;
+                axisMinOther = object.getX();
+                axisMaxOther = object.getX() + object.getWidth();
+                orthoMinThis = this.y;
+                orthoMaxThis = this.y + this.height;
+                orthoMinOther = object.getY();
+                orthoMaxOther = object.getY() + object.getHeight();
+            } else {
+                axisMinThis = this.y;
+                axisMaxThis = this.y + this.height;
+                axisMinOther = object.getY();
+                axisMaxOther = object.getY() + object.getHeight();  
+                orthoMinThis = this.x;
+                orthoMaxThis = this.x + this.width;
+                orthoMinOther = object.getX();
+                orthoMaxOther = object.getX() + object.getWidth();          
+            }
         if ((orthoMinOther < orthoMinThis && orthoMinThis < orthoMaxOther) || 
             (orthoMinOther < orthoMaxThis && orthoMaxThis < orthoMaxOther) || 
             (orthoMinThis <= orthoMinOther && orthoMinOther < orthoMaxThis)) {

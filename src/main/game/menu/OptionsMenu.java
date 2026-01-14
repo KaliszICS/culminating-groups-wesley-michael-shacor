@@ -3,25 +3,12 @@ import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.geom.Rectangle2D;
 
-/* settings?
-+----------------------------------------+
-|                                        |
-|               <OPTIONS>                |
-|                                        |
-|    VOLUME  ................    <BAR>   |
-|                                        |
-|                                        |
-|         idk some other setting         |
-|                                        |
-|                                        |
-+----------------------------------------+
-*/
-
+/**
+ * Defines an options menu
+ * @version 1.0
+ * @author Wesley, Michael, Shacor
+ */
 public class OptionsMenu implements Menu{
-    /**
-     * @version 1.0
-     * @author Wesley, Michael, Shacor
-     */
     private Image selector;
     private static final int WIDTH = 640;
     private static final int HEIGHT = 480;
@@ -30,11 +17,12 @@ public class OptionsMenu implements Menu{
     /**
      * Constructs a OptionsMenu
      */
-    public OptionsMenu(){
+    public OptionsMenu() {
         this.selector = game.Utils.loadImage("selector.png");
     }
 
-    public void draw(Graphics2D g){
+    @Override
+    public void draw(Graphics2D g) {
         Rectangle2D rect = g.getFontMetrics().getStringBounds("OPTIONS", g);
         Rectangle2D rect1 = g.getFontMetrics().getStringBounds("You have no other options.", g);
         Rectangle2D rect2 = g.getFontMetrics().getStringBounds("EXIT GAME", g);
@@ -53,18 +41,20 @@ public class OptionsMenu implements Menu{
     /**
      * Exits the game
      */
-    public void select(){
+    @Override
+    public void select() {
         System.exit(1);
     }
 
     /**
      * Returns to the main menu
      */
-    public void cancel(){
+    @Override
+    public void cancel() {
         game.Main.swapToMain();
     }
     
-    public void update(){}
-    public void moveUp(){}
-    public void moveDown(){}
+    public void update() {}
+    public void moveUp() {}
+    public void moveDown() {}
 }

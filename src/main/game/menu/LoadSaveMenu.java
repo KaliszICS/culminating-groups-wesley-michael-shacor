@@ -3,12 +3,12 @@ import java.awt.geom.Rectangle2D;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import game.Utils;
-
+/**
+ * Defines a save and load menu
+ * @version 1.0
+ * @author Wesley, Michael, Shacor
+ */
 public class LoadSaveMenu implements Menu {
-    /**
-     * @version 1.0
-     * @author Wesley, Michael, Shacor
-     */
     private int currentOption = 0;
     private static final int TOTAL_SAVES = 3;
 

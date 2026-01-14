@@ -2,11 +2,13 @@ package game;
 
 import java.awt.Graphics2D;
 
+/**
+ * Defines an object that is drawable (can be drawn on screen)
+ * @version 1.0
+ * @author Wesley, Michael, Shacor
+ */
+
 public interface Drawable {
-    /**
-     * @version 1.0
-     * @author Wesley, Michael, Shacor
-     */
 
     /**
      * Draw an object
