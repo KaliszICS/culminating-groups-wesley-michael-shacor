@@ -4,6 +4,7 @@ This project can be run on Windows simply by running the .bat file.
 If you do not wish to use the .bat file, run these two commands in the main folder
 
 javac @files.txt -d target
+
 java -cp target game/Main
 
 Controls:
