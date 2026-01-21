@@ -1,0 +1,10 @@
+You have javadocs but I feel they could be a bit more in depth, especially methods where understanding how something is calculated would be useful.  You will normally find this on some methods such as compareTo as an example.
+Your NPCs have the potential to spawn outside of the map.
+You have a save game section but no way to save it or load it!
+When going around houses, ones with a triangle top can be walked through. Even if this intentional I would make the people be behind the house instead of in front of it (draw the house after the person)
+Diagonal is still faster than normal movement but this is due to how rounding works.  You'll find in a lot of older (especially pixel are games) they just don't allow diagonal movement due to lack of precision.
+Looks like you have some interactions you wanted to do but never got them finished.
+
+Overall good job!  Just some small stuff to keep an eye on in the future if you want to make another game!  Time is always the biggest enemy.
+
+95%
